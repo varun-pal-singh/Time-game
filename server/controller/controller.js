@@ -21,9 +21,12 @@ const transporter = nodemailer.createTransport({
 
 exports.get = async (req, res) => {
   try {
+    console.log("here");
+    
     // Find all users in the 'User' collection
     const users = await UserInfo.find();
-
+    console.log(users);
+    
     // Check if there are no users found
     if (users.length === 0) {
       return res.status(404).json({

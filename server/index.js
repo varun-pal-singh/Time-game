@@ -12,6 +12,13 @@ app.use(cookieParser());
 // app.use(bodyparser.urlencoded({ extended: true }));
 // app.use(fileupload());
 app.use(cors());
+app.use(cors({
+  origin: "*", // Adjust if your frontend is running on a different port
+  credentials: true, // Allow credentials like cookies
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
 app.use(require("./router/index.js"));
 const mongoose = require("mongoose");
 const { urlencoded } = require("express");
