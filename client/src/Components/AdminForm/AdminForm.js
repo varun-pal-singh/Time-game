@@ -14,7 +14,7 @@ const AdminForm = () => {
     e.preventDefault();
     try {
     //   const response = await axios.post("https://game-memory-opal.vercel.app/register", { email });
-      const response = await axios.post("http://localhost:3001/register", { email });
+      const response = await axios.post("https://tile-memory-game-server.vercel.app/register", { email });
       if (response.data.success) {
         setAccessToken(response.data.accessToken);
         setPopupMessage("User registered successfully.");
