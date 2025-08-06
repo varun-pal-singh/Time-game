@@ -18,7 +18,7 @@ const UserForm = ({ formData, setFormData, setIsRunning, setFormSubmitted }) => 
 
     // Send the email and token to the backend for authentication
     try {
-      const response = await fetch("https://tile-memory-game-server.vercel.app/authenticate", {
+      const response = await fetch("http://localhost:3002/authenticate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
