@@ -1,5 +1,6 @@
 import { useState } from "react";
-import "./UserForm.css";
+
+import "../../styles/UserForm.css";
 import PopupMessage from "../PopupMessage/PopupMessage";
 
 const UserForm = ({ formData, setFormData, setIsRunning, setFormSubmitted }) => {

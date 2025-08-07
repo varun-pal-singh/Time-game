@@ -1,13 +1,8 @@
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import GameBoard from "./Components/GameBoard/GameBoard";
-import Navbar from "./Components/Navbar/Navbar";
-import ScoreBoard from "./Components/ScoreBoard/ScoreBoard";
-import StartButton from "./Components/StartButton/StartButton";
-import ModalMessage from "./Components/ModalMessage/ModalMessage";
-import { DataProvider } from "./GameContext";
-import InstructionsModal from "./Components/ModalMessage/Instructions";
 import UserForm from "./Components/UserForm/UserForm";
 import AdminForm from "./Components/AdminForm/AdminForm";
+import GameUI from "./Components/GameUI/GameUI"; // Import the new GameUI component
+import { DataProvider } from "./GameContext";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -18,11 +13,9 @@ const App = () => {
     email: "",
     levelReached: "0",
   });
-
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [isReady, setIsReady] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
-  // const [levelReached,setLevelReached] = useState(0);
 
   useEffect(() => {
     if (isReady > 0) {
@@ -41,7 +34,6 @@ const App = () => {
       console.log("Posting form data:", updatedFormData);
 
       const response = await axios.post(`http://localhost:3002`, updatedFormData);
-      // const response = await axios.post(`https://tile-memory-game-server.vercel.app`, updatedFormData);
 
       if (response.data.success) {
         console.log("User data saved successfully:", response.data);
@@ -54,34 +46,32 @@ const App = () => {
   };
 
   return (
-    <Router>
-      <Switch>
-        <Route
-          exact
-          path="/"
-          render={() =>
-            formSubmitted ? (
-              <DataProvider>
-                <Navbar />
-                <ScoreBoard />
-                <GameBoard />
-                <StartButton />
-                <ModalMessage isReady={isReady} setIsReady={setIsReady} />
-                <InstructionsModal />
-              </DataProvider>
-            ) : (
-              <UserForm
-                formData={formData}
-                setFormData={setFormData}
-                setIsRunning={setIsRunning}
-                setFormSubmitted={setFormSubmitted}
-              />
-            )
-          }
-        />
-        <Route path="/RMoney/Admin" component={AdminForm} />
-      </Switch>
-    </Router>
+    <>
+      <Router>
+        <Switch>
+          <Route
+            exact
+            path="/"
+            render={() =>
+              formSubmitted ? (
+                <DataProvider>
+                  {/* Render the GameUI component here */}
+                  <GameUI isReady={isReady} setIsReady={setIsReady} />
+                </DataProvider>
+              ) : (
+                <UserForm
+                  formData={formData}
+                  setFormData={setFormData}
+                  setIsRunning={setIsRunning}
+                  setFormSubmitted={setFormSubmitted}
+                />
+              )
+            }
+          />
+          <Route path="/RMoney/Admin" component={AdminForm} />
+        </Switch>
+      </Router>
+    </>
   );
 };
 

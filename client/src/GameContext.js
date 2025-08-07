@@ -1,172 +1,160 @@
-
 import { createContext, useState, useRef, useEffect } from "react";
 
 const DataContext = createContext({})
 
 export const DataProvider = ({ children }) => {
 
-  const [gameLevel, SetGameLeveL] = useState(1)
+  const [gameLevel, SetGameLeveL] = useState(1);
   const [health, setHealth] = useState(3);
-
   const Achivement = useRef(0);
+  const mainValToFind = useRef(null);
 
+  const getGridSize = (level) => level + 3;
+  const getTotalCards = (level) => getGridSize(level) * getGridSize(level);
 
   const ReduceHealth = () => {
-    setHealth(health => health - 1)
+    setHealth(health => health - 1);
     if (health === 1) {
-      SetMessage(Message => Message = ".You have used all your chances")
-      setOpen(open => open = true)
+      SetMessage(".You have used all your chances");
+      setOpen(true);
       ResetGame();
-
     }
-  }
+  };
 
-  const [previewSeconds, setSeconds] = useState(5 + (3 * gameLevel))
-  const [selectionSeconds, SetSelecionSeconds] = useState(10 + (6 * gameLevel))
-  const [gameStarted, SetGameStarted] = useState(false)
-  const [gameOver, SetGameOver] = useState(false)
-  const [Message, SetMessage] = useState("")
+  const [previewSeconds, setSeconds] = useState(5 + (gameLevel * 2));
+  const [selectionSeconds, SetSelecionSeconds] = useState(10 + (gameLevel * 3));
+  const [gameStarted, SetGameStarted] = useState(false);
+  const [gameOver, SetGameOver] = useState(false);
+  const [Message, SetMessage] = useState("");
 
-  const interval = useRef(null)
-
-  const selectiontTimeInterval = useRef(null)
-  const disableGameButtons = useRef(false)
-
-  const [showInstructions, setShowIstructions] = useState(false)
-
-  const HideInstructions = () => {
-    setShowIstructions(false)
-  }
-
-  const DisplayInstructions = () => {
-
-    setShowIstructions(true)
-  }
-
-
-  const [resetUpdate, setResetUpdate] = useState(false)
+  const interval = useRef(null);
+  const selectiontTimeInterval = useRef(null);
+  const disableGameButtons = useRef(false);
+  const [showInstructions, setShowIstructions] = useState(false);
+  const HideInstructions = () => setShowIstructions(false);
+  const DisplayInstructions = () => setShowIstructions(true);
+  const [resetUpdate, setResetUpdate] = useState(false);
   const [open, setOpen] = useState(false);
+  const [Clicked, SetClicked] = useState(false);
+  const [showPreviewCounter, setShowPreviewCounter] = useState(true);
 
   const StartStage = () => {
-    disableGameButtons.current = false
-    buttonStates.current = [...Array(4 * (gameLevel) * 2)].map((value) => (value = true))
-    setSeconds(previewSeconds => previewSeconds = 5 + (3 * gameLevel))
-    setShowPreviewCounter(showPreviewCounter => showPreviewCounter = true)
-    SetSelecionSeconds(selectioSeconds => selectioSeconds = (10 + (6 * gameLevel)))
-    SetGameStarted(gameStarted => gameStarted = true)
+    disableGameButtons.current = false;
+    const totalCards = getTotalCards(gameLevel);
+    buttonStates.current = [...Array(totalCards)].map(() => true);
+    setSeconds(5 + (gameLevel * 2));
+    setShowPreviewCounter(true);
+    SetSelecionSeconds(10 + (gameLevel * 3));
+    SetGameStarted(true);
     StartPreviewCounter();
-    Achivement.current = gameLevel
-
-
-  }
-
+    Achivement.current = gameLevel;
+  };
 
   useEffect(() => {
-    if (previewSeconds === 0) stopCounter()
-  }, [previewSeconds])
+    if (previewSeconds === 0) stopCounter();
+  }, [previewSeconds]);
 
   useEffect(() => {
     if (selectionSeconds === 0) {
-      SetMessage(Message => Message = ".You ran out of time");
-      setOpen(open => open = true)
+      SetMessage("You ran out of time.");
+      setOpen(true);
       stopSelectiontime();
     }
-  }, [selectionSeconds])
-
-
+  }, [selectionSeconds]);
 
   const StartPreviewCounter = () => interval.current = setInterval(() => {
-    setSeconds(previewSeconds => previewSeconds -= 1)
-  }, 1000)
+    setSeconds(prevSeconds => prevSeconds - 1);
+  }, 1000);
 
   const StartSelecetionCounter = () => selectiontTimeInterval.current = setInterval(() => {
-    SetSelecionSeconds(selectionSeconds => selectionSeconds -= 1)
-  }, 1000)
+    SetSelecionSeconds(prevSeconds => prevSeconds - 1);
+  }, 1000);
 
-  const stopSelectiontime = () => {
-
-    ResetGame();
-  }
+  const stopSelectiontime = () => ResetGame();
 
   const stopCounter = () => {
-    clearInterval(interval.current)
-    setSeconds(previewSeconds => previewSeconds = 0)
-    buttonStates.current = [...Array(4 * (gameLevel) * 2)].map((value) => (value = false))
-    SetClicked(Clicked => !Clicked)
-    setShowPreviewCounter(showPreviewCounter => showPreviewCounter = false)
+    clearInterval(interval.current);
+    setSeconds(0);
+    const totalCards = getTotalCards(gameLevel);
+    buttonStates.current = [...Array(totalCards)].map(() => false);
+    SetClicked(prev => !prev);
+    setShowPreviewCounter(false);
     StartSelecetionCounter();
-  }
+  };
 
   const UpgradeLevel = () => {
-    SetGameLeveL(gameLevel => gameLevel += 1)
-    clearInterval(selectiontTimeInterval.current)
-    SetClicked(Clicked => !Clicked)
-    SetGameStarted(gameStarted => gameStarted = false)
-  }
+    SetGameLeveL(prevLevel => prevLevel + 1);
+    clearInterval(selectiontTimeInterval.current);
+    SetClicked(prev => !prev);
+    SetGameStarted(false);
+  };
 
   const ResetGame = () => {
-    setHealth(health => health = 3)
-    SetGameLeveL(gameLevel => gameLevel = 1)
-    setResetUpdate(resetUpdate => !resetUpdate)
-    clearInterval(selectiontTimeInterval.current)
-    SetGameStarted(gameStarted => gameStarted = false)
-    SetGameOver(gameOver => gameOver = true)
+    setHealth(3);
+    SetGameLeveL(1);
+    setResetUpdate(prev => !prev);
+    clearInterval(selectiontTimeInterval.current);
+    SetGameStarted(false);
+    SetGameOver(true);
+  };
 
-  }
-  const CloseModal = () => {
-    setOpen(open => open = false)
-  }
-
+  const CloseModal = () => setOpen(false);
   const correctCards = useRef(0);
-  const gameMap = useRef([])
-  const buttonStates = useRef([])
-  const [Clicked, SetClicked] = useState(false)
-  const [showPreviewCounter, setShowPreviewCounter] = useState(true)
-
+  const gameMap = useRef([]);
+  const buttonStates = useRef([]);
 
   const RevealHiddenColors = (Index) => {
-
-    SetClicked(Clicked => !Clicked)
-    buttonStates.current[Index] = true
-    if (gameMap.current[Index] === "#4d4d00") {
+    SetClicked(prev => !prev);
+    buttonStates.current[Index] = true;
+    if (gameMap.current[Index] !== mainValToFind.current) {
       ReduceHealth();
-    }
-    else {
-      correctCards.current -= 1
+    } else {
+      correctCards.current -= 1;
       if (correctCards.current === 0) {
-        UpgradeLevel()
+        UpgradeLevel();
       }
     }
+  };
 
-  }
-
-  const getRandomIdx = (n) => {
-    return Math.floor(Math.random() * n);
-  }
-
-  // const randomVals = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-  // const n = randomVals.length;
-  // const mainValToFind = randomVals[getRandomIdx(n)];
+  const getRandomIdx = (n) => Math.floor(Math.random() * n);
 
   useEffect(() => {
-    disableGameButtons.current = true
+    disableGameButtons.current = true;
+    const randomVals = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    const n = randomVals.length;
+    mainValToFind.current = randomVals[getRandomIdx(n)];
 
-    gameMap.current = [...Array(4 * (gameLevel) * 2)].map((value) => {
-      return value = ["#4d4d00", "#993d00"][(Math.random() >= 0.5) ? 1 : 0]
-      // value = randomVals[getRandomIdx(n)]
-      // console.log("value ", value);
-      // return value;
-    });
+    const totalCards = getTotalCards(gameLevel);
+    
+    const numMainVals = (4 * gameLevel); 
+    
+    const newGameMap = [];
 
-    correctCards.current = gameMap.current.filter((value) => value === "#993d00").length
-    // correctCards.current = gameMap.current.filter((value) => value === mainValToFind).length;
-    buttonStates.current = [...Array(4 * (gameLevel) * 2)].map((value) => (value = false))
-    SetClicked(Clicked => !Clicked)
+    for (let i = 0; i < totalCards - numMainVals; i++) {
+      let randomVal;
+      do {
+        randomVal = randomVals[getRandomIdx(n)];
+      } while (randomVal === mainValToFind.current);
+      newGameMap.push(randomVal);
+    }
+    
+    for (let i = 0; i < numMainVals; i++) {
+        newGameMap.push(mainValToFind.current);
+    }
 
+    for (let i = newGameMap.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newGameMap[i], newGameMap[j]] = [newGameMap[j], newGameMap[i]];
+    }
+
+    gameMap.current = newGameMap;
+    correctCards.current = numMainVals;
+    buttonStates.current = [...Array(totalCards)].map(() => false);
+    SetClicked(prev => !prev);
   }, [gameLevel, resetUpdate]);
 
   return (
-    <DataContext.Provider value={{ HideInstructions, showInstructions, DisplayInstructions, disableGameButtons, gameOver, Clicked, health, Message, Achivement, open, CloseModal, gameStarted, setHealth, ReduceHealth, gameLevel, UpgradeLevel, ResetGame, previewSeconds, StartStage, buttonStates, RevealHiddenColors, gameMap, showPreviewCounter, selectionSeconds }}>
+    <DataContext.Provider value={{ HideInstructions, showInstructions, DisplayInstructions, disableGameButtons, gameOver, Clicked, health, Message, Achivement, open, CloseModal, gameStarted, setHealth, ReduceHealth, gameLevel, UpgradeLevel, ResetGame, previewSeconds, StartStage, buttonStates, RevealHiddenColors, gameMap, showPreviewCounter, selectionSeconds, mainValToFind: mainValToFind.current }}>
       {children}
     </DataContext.Provider>
   )

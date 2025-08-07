@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./AdminForm.css";
+// import "./AdminForm.css";
+import "../../styles/AdminForm.css";
 import PopupMessage from "./PopupMessage";
 
 const AdminForm = () => {
