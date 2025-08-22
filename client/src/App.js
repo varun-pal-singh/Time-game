@@ -33,7 +33,9 @@ const App = () => {
 
       console.log("Posting form data:", updatedFormData);
 
-      const response = await axios.post(`http://localhost:3002`, updatedFormData);
+      // const response = await axios.post(`http://localhost:3002`, updatedFormData);
+      const response = await axios.post(`http://192.168.10.116:3002`, updatedFormData);
+
 
       if (response.data.success) {
         console.log("User data saved successfully:", response.data);

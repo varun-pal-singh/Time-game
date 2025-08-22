@@ -16,7 +16,7 @@ const userRegistrationSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now,
-        expires: 300, // 1800 seconds = 30 minutes
+        expires: 1800, // 1800 seconds = 30 minutes
     }
 },{timestamps:true});
 

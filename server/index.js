@@ -11,12 +11,9 @@ app.use(cookieParser());
 
 // app.use(bodyparser.urlencoded({ extended: true }));
 // app.use(fileupload());
-app.use(cors());
 app.use(cors({
-  origin: "*", // Adjust if your frontend is running on a different port
-  credentials: true, // Allow credentials like cookies
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"]
+  origin: ['http://localhost:5000', 'http://192.168.10.116:5000'],
+  credentials: true
 }));
 
 app.use(require("./router/index.js"));

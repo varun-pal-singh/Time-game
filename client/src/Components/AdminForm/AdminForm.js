@@ -14,7 +14,8 @@ const AdminForm = () => {
     
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3002/register", { email });
+      // const response = await axios.post("http://localhost:3002/register", { email });
+      const response = await axios.post("http://192.168.10.116:3002/register", { email });
       if (response.data.success) {
         setAccessToken(response.data.accessToken);
         setPopupMessage("User registered successfully.");
