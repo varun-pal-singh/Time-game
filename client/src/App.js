@@ -6,6 +6,8 @@ import { DataProvider } from "./GameContext";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
+const API_URL = process.env.REACT_APP_API_URL || '';
+
 const App = () => {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -34,7 +36,7 @@ const App = () => {
       console.log("Posting form data:", updatedFormData);
 
       // const response = await axios.post(`http://localhost:3002`, updatedFormData);
-      const response = await axios.post(`http://192.168.10.116:3002`, updatedFormData);
+      const response = await axios.post(`${API_URL}/api`, updatedFormData);
 
 
       if (response.data.success) {

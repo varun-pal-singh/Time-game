@@ -4,6 +4,8 @@ import axios from "axios";
 import "../../styles/AdminForm.css";
 import PopupMessage from "./PopupMessage";
 
+const API_URL = process.env.REACT_APP_API_URL || '';
+
 const AdminForm = () => {
   const [email, setEmail] = useState("");
   const [accessToken, setAccessToken] = useState("");
@@ -15,7 +17,7 @@ const AdminForm = () => {
     e.preventDefault();
     try {
       // const response = await axios.post("http://localhost:3002/register", { email });
-      const response = await axios.post("http://192.168.10.116:3002/register", { email });
+      const response = await axios.post(`${API_URL}/api/register`, { email });
       if (response.data.success) {
         setAccessToken(response.data.accessToken);
         setPopupMessage("User registered successfully.");
